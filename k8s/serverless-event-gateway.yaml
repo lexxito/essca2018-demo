@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: serverless-event-gateway
+  labels:
+    app: serverless-event-gateway
+spec:
+  selector:
+    matchLabels:
+      app: serverless-event-gateway
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: serverless-event-gateway
+    spec:
+      containers:
+        - name: serverless-event-gateway
+          image: serverless/event-gateway:0.9.1
+          args:
+            - "-db-hosts=etcd-event-gateway:2379"
+            - "-log-format=text"
+            - "-log-level=debug"
+          livenessProbe:
+            httpGet:
+              path: "/v1/status"
+              port: 4001
+          readinessProbe:
+            httpGet:
+              path: "/v1/status"
+              port: 4001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: serverless-event-gateway
+spec:
+  type: ClusterIP
+  ports:
+    - name: events
+      protocol: TCP
+      port: 4000
+    - name: config
+      protocol: TCP
+      port: 4001
+  selector:
+    app: serverless-event-gateway
+---
+apiVersion: v1
+items:
+- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    name: serverless-event-gateway-ingress
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/rewrite-target: /
+  spec:
+    rules:
+    - 
+      http:
+        paths:
+        - backend: 
+            serviceName: serverless-event-gateway
+            servicePort: 4000
+          path: /serverless-event-gateway/events
+        - backend: 
+            serviceName: serverless-event-gateway
+            servicePort: 4001
+          path: /serverless-event-gateway/config
+kind: List

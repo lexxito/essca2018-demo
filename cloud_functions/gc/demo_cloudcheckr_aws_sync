@@ -1,0 +1,35 @@
+import json
+import httplib2
+
+
+def lambda_handler(request):
+    request_json = request.get_json()
+
+    hostname = 'https://api.cloudcheckr.com/api'
+    endpoint = '/account.json/get_account'
+    verb = 'GET'
+    headers = {'Content-Type': 'application/json'}
+
+    access_key = request_json['data']['body']['access_key']
+    account_id = request_json['data']['body']['account_id']
+
+    url = hostname + endpoint + '?access_key=' + access_key + '&account_id=' + str(account_id)
+
+    client = httplib2.Http(disable_ssl_certificate_validation=True)
+
+    (response, content) = client.request(url,
+                                         verb,
+                                         body=None,
+                                         headers=headers)
+
+    if json.loads(content)['LastUpdated']:
+        return json.dumps({
+            "statusCode": 200,
+            "body": "AWS Account is synchronized"
+        })
+    else:
+        return json.dumps({
+            "statusCode": 200,
+            "body": "AWS Account is not synchronized. It might take few minutes..."
+        })
+

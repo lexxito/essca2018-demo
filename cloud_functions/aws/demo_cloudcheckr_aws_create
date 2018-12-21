@@ -1,0 +1,31 @@
+import json
+import httplib2
+
+def lambda_handler(event, context):
+    hostname = 'https://api.cloudcheckr.com/api'
+    endpoint = '/account.json/add_account_v3'
+    verb = 'POST'
+    headers = {'Content-Type': 'application/json'}
+    
+    access_key = event['data']['body']['access_key']
+    aws_name = event['data']['body']['account_name']
+    aws_access = event['data']['body']['aws_access']
+    aws_secret = event['data']['body']['aws_secret']
+
+    url = hostname + endpoint + '?access_key=' + access_key
+
+    client = httplib2.Http(disable_ssl_certificate_validation=True)
+
+    body = {'aws_access_key': aws_access,
+            'aws_secret_key': aws_secret,
+            'account_name': aws_name}
+
+    (response, content) = client.request(url,
+                                         verb,
+                                         body=json.dumps(body),
+                                         headers=headers)
+
+    return {
+        "statusCode": 200,
+        "body": str(content)
+    }

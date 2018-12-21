@@ -1,0 +1,4 @@
+just echo-trigger aws-create '{"access_key": "'"$CLOUD_CHECK"'","account_name": "test","aws_access": "'"$AWS_ACCESS"'","aws_secret": "'"$AWS_SECRET"'"}'
+just echo-trigger aws-sync '{"access_key": "'"$CLOUD_CHECK"'","account_id": 8}'
+just echo-trigger aws-bp '{"access_key": "'"$CLOUD_CHECK"'","account_id": 8}' 
+just echo-trigger aws-delete '{"access_key": "'"$CLOUD_CHECK"'","account_name": "test"}' 
