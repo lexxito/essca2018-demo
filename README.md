@@ -24,7 +24,9 @@ The *gateway-start* and *etcd-start* will start containers easily. To check cont
 
 The *echo-register-any* and * echo-register-aws* will register functions on both aws and gc. To create a subscription run *sub-register* with function registered id
 
-**Note:** If while registering subsciption the error "no httpd type" has appeared, run: 
+**Note:** If while registering subsciption the error "no httpd type" has appeared, 
+run:
+
     curl -k --request POST --url https://{minikube_ip}/serverless-event-gateway/config/v1/spaces/default/eventtypes --header 'content-type: application/json' --data '{ "name": "http.request" }'
 
 ## Test commands
