@@ -4,9 +4,9 @@ import httplib2
 import numpy as np
 
 h = httplib2.Http(disable_ssl_certificate_validation=True)
-access_key = 'AKIAIPZZHJ5MOSRZ6YBQ'
-sec_key = 'mNiHN6c9h0rmSeMHvPqKrsUb9QPuCjXVU0yz4boE'
-cloudcheckr = 'Q5D3502K38CXRNK5FY14RURXWTZAYYJ2R1E29G09JLNP7KL7BA6J36NO3YLQ391U'
+access_key = ''
+sec_key = ''
+cloudcheckr = ''
 
 for i in range(0):
     post_data = {"access_key": cloudcheckr, "account_name": "test", "aws_access": access_key, "aws_secret": sec_key}
